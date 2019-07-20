@@ -43,14 +43,19 @@ int main(void)
 	glGenBuffers(1, &buffer);
 	// Select it using the identifier
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	// Populate the buffer
+	// Populate the buffer 
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void *) 0);
 
 	// Loop until the user closes the window
 	while (!glfwWindowShouldClose(window))
 	{
 		// Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
