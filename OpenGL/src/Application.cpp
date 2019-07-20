@@ -39,8 +39,11 @@ int main(void)
 	};
 
 	unsigned int buffer;
+	// Create a new buffer
 	glGenBuffers(1, &buffer);
+	// Select it using the identifier
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	// Populate the buffer
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
 
 	// Loop until the user closes the window
