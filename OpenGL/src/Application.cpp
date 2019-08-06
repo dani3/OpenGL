@@ -11,6 +11,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 int main(void)
 {
@@ -48,10 +49,10 @@ int main(void)
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positions[] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.5f,  0.5f,
-		-0.5f,  0.5f
+		-0.5f, -0.5f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -59,9 +60,13 @@ int main(void)
 		2, 3, 0
 	};
 
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
 	VertexArray* va = new VertexArray();
-	VertexBuffer* vb = new VertexBuffer(positions, 4 * 2 * sizeof(float));
+	VertexBuffer* vb = new VertexBuffer(positions, 4 * 4 * sizeof(float));
 	VertexBufferLayout* layout = new VertexBufferLayout();
+	layout->Push<float>(2);
 	layout->Push<float>(2);
 	va->AddBuffer(*vb, *layout);
 	
@@ -69,6 +74,10 @@ int main(void)
 
 	Shader* shader = new Shader("res/shaders/Basic.shader");
 	shader->Bind();
+
+	Texture* texture = new Texture("res/textures/Tree.png");
+	texture->Bind();
+	shader->SetUniform1i("u_Texture", 0);
 
 	va->Unbind();
 	vb->Unbind();
@@ -112,6 +121,7 @@ int main(void)
 	delete ib;
 	delete layout;
 	delete shader;
+	delete texture;
 	delete renderer;
 
 	glfwTerminate();
